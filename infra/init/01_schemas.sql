@@ -1,0 +1,17 @@
+CREATE SCHEMA IF NOT EXISTS raw;
+
+CREATE SCHEMA IF NOT EXISTS analytics;
+CREATE SCHEMA IF NOT EXISTS analytics_dev;
+
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'reporter') THEN
+    CREATE ROLE reporter NOLOGIN;
+  END IF;
+END
+$$;
+
+GRANT USAGE ON SCHEMA raw TO reporter;
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
