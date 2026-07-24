@@ -1,0 +1,65 @@
+# olist_dbt/dbt_project.yml
+
+name: 'olist_dbt'
+version: '1.0.0'
+config-version: 2
+
+# Doit correspondre à la clé racine de profiles.yml
+profile: 'olist_dbt'
+
+model-paths:    ["models"]
+analysis-paths: ["analyses"]
+test-paths:     ["tests"]
+seed-paths:     ["seeds"]
+macro-paths:    ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Garde-fou : empêche de lancer le projet avec une version incompatible
+require-dbt-version: [">=1.10.0", "<2.0.0"]
+
+vars:
+  # Date de "coupure" du dataset Olist, utilisée par plusieurs modèles
+  olist_max_date: '2018-10-17'
+  start_date: '2016-09-01'
+
+models:
+  olist_dbt:
+    +persist_docs:
+      relation: true
+      columns: true
+
+    staging:
+      +materialized: view
+      +schema: staging
+      +tags: ['staging']
+
+    intermediate:
+      +materialized: ephemeral
+      +schema: intermediate
+      +tags: ['intermediate']
+
+    marts:
+      +materialized: table
+      +schema: marts
+      core:
+        +tags: ['core', 'daily']
+      finance:
+        +tags: ['finance']
+
+seeds:
+  olist_dbt:
+    +schema: seeds
+    +quote_columns: false
+
+snapshots:
+  olist_dbt:
+    +target_schema: snapshots
+
+tests:
+  olist_dbt:
+    +store_failures: false
+    +severity: error

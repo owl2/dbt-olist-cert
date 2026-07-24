@@ -1,0 +1,26 @@
+# olist_dbt/profiles.yml
+olist_dbt:
+  target: dev
+  outputs:
+
+    dev:
+      type: postgres
+      host: "{{ env_var('DBT_PG_HOST', 'localhost') }}"
+      port: "{{ env_var('DBT_PG_PORT', '5433') | int }}"
+      user: "{{ env_var('DBT_PG_USER', 'olist') }}"
+      password: "{{ env_var('DBT_PG_PASSWORD') }}"
+      dbname: "{{ env_var('DBT_PG_DBNAME', 'olist') }}"
+      schema: analytics_dev
+      threads: 4
+      keepalives_idle: 0
+      retries: 1
+
+    prod:
+      type: postgres
+      host: "{{ env_var('DBT_PG_HOST', 'localhost') }}"
+      port: "{{ env_var('DBT_PG_PORT', '5433') | int }}"
+      user: "{{ env_var('DBT_PG_USER', 'olist') }}"
+      password: "{{ env_var('DBT_PG_PASSWORD') }}"
+      dbname: "{{ env_var('DBT_PG_DBNAME', 'olist') }}"
+      schema: analytics
+      threads: 8
