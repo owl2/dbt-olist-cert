@@ -1,0 +1,16 @@
+# Données
+data/
+*.csv
+*.zip
+
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+
+# dbt
+olist_dbt/target/
+olist_dbt/dbt_packages/
+olist_dbt/logs/
